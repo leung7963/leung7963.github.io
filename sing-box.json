@@ -1,0 +1,184 @@
+{
+    "log": {
+        "disabled": false,
+        "level": "info",
+        "timestamp": true
+    },
+    "dns": {
+        "servers": [
+            {
+                "tag": "dns_proxy",
+                "address": "https://8.8.8.8/dns-query",
+                "address_resolver": "dns_resolver"
+            },
+            {
+                "tag": "dns_direct",
+                "address": "https://dns.alidns.com/dns-query",
+                "address_resolver": "dns_resolver",
+                "detour": "DIRECT"
+            },
+            {
+                "tag": "dns_fakeip",
+                "address": "fakeip"
+            },
+            {
+                "tag": "dns_resolver",
+                "address": "https://223.5.5.5/dns-query",
+                "detour": "DIRECT"
+            },
+            {
+                "tag": "dns_block",
+                "address": "rcode://success"
+            }
+        ],
+        "rules": [
+            {
+                "outbound": [
+                    "any"
+                ],
+                "server": "dns_resolver"
+            },
+            {
+                "rule_set": [
+                    "geosite-category-ads"
+                ],
+                "server": "dns_block",
+                "disable_cache": true
+            },
+            {
+                "rule_set": [
+                    "geosite-geolocation-!cn"
+                ],
+                "query_type": [
+                    "A",
+                    "AAAA"
+                ],
+                "server": "dns_fakeip"
+            },
+            {
+                "rules": [
+                    {
+                        "rule_set": [
+                            "geosite-cn"
+                        ]
+                    }
+                ],
+                "type": "logical",
+                "mode": "or",
+                "server": "dns_direct"
+            },
+            {
+                "rules": [
+                    {
+                        "rule_set": [
+                            "geosite-geolocation-!cn",
+                            "geosite-goproxy"
+                        ]
+                    }
+                ],
+                "type": "logical",
+                "mode": "or",
+                "server": "dns_proxy"
+            }
+        ],
+        "final": "dns_proxy",
+        "independent_cache": true,
+        "fakeip": {
+            "enabled": true,
+            "inet6_range": "fc00::\/18",
+            "inet4_range": "198.18.0.0\/15"
+        }
+    },
+    "ntp": {
+        "enabled": true,
+        "server": "time.windows.com",
+        "server_port": 123,
+        "interval": "30m",
+        "detour": "DIRECT"
+    },
+    "inbounds": [
+        {
+            "type": "mixed",
+            "tag": "mixed-in",
+            "listen": "0.0.0.0",
+            "listen_port": 2080
+        },
+        {
+            "type": "tun",
+            "tag": "tun-in",
+            "address": [
+                "172.18.0.1/30",
+                "fdfe:dcba:9876::1/126"
+            ],
+            "auto_route": true,
+            "strict_route": true,
+            "stack": "mixed",
+            "sniff": true
+        }
+    ],
+    "outbounds": [],
+    "route": {
+        "rules": [
+            {
+                "rules": [
+                    {
+                        "rule_set": [
+                            "geosite-geolocation-!cn"
+                        ]
+                    }
+                ],
+                "outbound": "节点选择",
+                "type": "logical",
+                "mode": "or"
+            },
+            {
+                "domain_suffix": [
+                    ".shila.nyc.mn"
+                ],
+                "outbound": "DIRECT"
+            }
+        ],
+        "final": "漏网之鱼",
+        "auto_detect_interface": true,
+        "rule_set": [
+            {
+                "tag": "geosite-category-ads",
+                "type": "remote",
+                "format": "binary",
+                "download_detour": "DIRECT",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads.srs"
+            },
+            {
+                "tag": "geosite-geolocation-!cn",
+                "type": "remote",
+                "format": "binary",
+                "download_detour": "DIRECT",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs"
+            },
+            {
+                "tag": "geosite-goproxy",
+                "type": "remote",
+                "format": "binary",
+                "download_detour": "DIRECT",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-goproxy.srs"
+            },
+            {
+                "tag": "geosite-cn",
+                "type": "remote",
+                "format": "binary",
+                "download_detour": "DIRECT",
+                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs"
+            }
+        ]
+    },
+    "experimental": {
+        "cache_file": {
+            "enabled": true,
+            "store_fakeip": true
+        },
+        "clash_api": {
+            "external_controller": "127.0.0.1:9090",
+            "external_ui": "dashboard"
+        }
+    }
+}
