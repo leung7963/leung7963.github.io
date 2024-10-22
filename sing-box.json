@@ -12,7 +12,8 @@
             },
             {
                 "tag": "dns_direct",
-                "address": "https://dns.alidns.com/dns-query"
+                "address": "https://dns.alidns.com/dns-query",
+                "detour": "DIRECT"
             },
             {
                 "tag": "dns_fakeip",
