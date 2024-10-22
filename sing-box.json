@@ -8,13 +8,11 @@
         "servers": [
             {
                 "tag": "dns_proxy",
-                "address": "https://8.8.8.8/dns-query",
-                "address_resolver": "dns_resolver"
+                "address": "https://8.8.8.8/dns-query"
             },
             {
                 "tag": "dns_direct",
                 "address": "https://dns.alidns.com/dns-query",
-                "address_resolver": "dns_resolver",
                 "detour": "DIRECT"
             },
             {
