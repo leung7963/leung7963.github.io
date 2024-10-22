@@ -36,7 +36,7 @@
                 "outbound": [
                     "any"
                 ],
-                "server": "dns_resolver"
+                "server": "dns_direct"
             },
             {
                 "rule_set": [
@@ -50,8 +50,7 @@
                     "geosite-geolocation-!cn"
                 ],
                 "query_type": [
-                    "A",
-                    "AAAA"
+                    "A"
                 ],
                 "server": "dns_fakeip"
             },
@@ -85,7 +84,6 @@
         "independent_cache": true,
         "fakeip": {
             "enabled": true,
-            "inet6_range": "fc00::\/18",
             "inet4_range": "198.18.0.0\/15"
         }
     },
@@ -107,8 +105,7 @@
             "type": "tun",
             "tag": "tun-in",
             "address": [
-                "172.18.0.1/30",
-                "fdfe:dcba:9876::1/126"
+                "172.18.0.1/30"
             ],
             "auto_route": true,
             "strict_route": true,
