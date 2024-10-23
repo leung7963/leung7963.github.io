@@ -31,7 +31,8 @@
       },
       {
         "tag": "block",
-        "address": "rcode://success"
+        "address": "rcode://success",
+        "detour": "block"
       }
     ],
     "rules": [
