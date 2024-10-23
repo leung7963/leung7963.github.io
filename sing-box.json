@@ -25,7 +25,7 @@
         "detour": "proxy"
       },
       {
-        "tag": "localDns",
+        "tag": "DIRECT",
         "address": "https://223.5.5.5/dns-query",
         "detour": "DIRECT"
       },
@@ -41,7 +41,7 @@
           "cdn.jsdelivr.net",
           "testingcf.jsdelivr.net"
         ],
-        "server": "localDns"
+        "server": "DIRECT"
       },
       {
         "rule_set": "geosite-category-ads-all",
@@ -49,12 +49,12 @@
       },
       {
         "outbound": "any",
-        "server": "localDns",
+        "server": "DIRECT",
         "disable_cache": true
       },  
       {
-        "clash_mode": "direct",
-        "server": "localDns"
+        "clash_mode": "DIRECT",
+        "server": "DIRECT"
       },
       {
         "clash_mode": "global",
