@@ -33,6 +33,10 @@
       {
         "tag": "fakeip-dns",
         "address": "fakeip"
+      },
+      {
+        "tag": "block-dns",
+        "address": "rcode://success"
       }
     ],
     "rules": [
@@ -133,7 +137,7 @@
     },
     {
       "type": "block",
-      "tag": "block"
+      "tag": "→ block"
     }
   ],
   "route": {
@@ -162,7 +166,7 @@
             "protocol": "stun"
           }
         ],
-        "outbound": "block"
+        "outbound": "→ block"
       },
       {
         "domain_suffix": [
