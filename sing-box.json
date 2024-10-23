@@ -42,12 +42,6 @@
     ],
     "rules": [
       {
-        "rule_set": [
-          "geosite-category-ads-all"
-        ],
-        "server": "block-dns"
-      },
-      {
         "outbound": "any",
         "server": "local-dns"
       },
@@ -148,15 +142,7 @@
     }
   ],
   "route": {
-    "rule_set": [
-      {
-        "type": "remote",
-        "format": "binary",
-        "download_detour": "direct",
-        "tag": "geosite-category-ads-all",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/category-ads-all.srs"
-      }
-    ],
+    "rule_set": [],
     "rules": [
       {
         "protocol": "dns",
@@ -165,23 +151,6 @@
       {
         "port": 53,
         "outbound": "dns-out"
-      },
-      {
-        "type": "logical",
-        "mode": "or",
-        "rules": [
-          {
-            "port": 853
-          },
-          {
-            "network": "udp",
-            "port": 443
-          },
-          {
-            "protocol": "stun"
-          }
-        ],
-        "outbound": "block"
       },
       {
         "domain_suffix": [
