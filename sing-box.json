@@ -1,17 +1,17 @@
 log: {
-        disabled: false,
-        level: "info",
+    disabled: false,
+    level: "info",
     },
-    dns: {
-        servers: [
-            {
-                tag: "google",
-                address: "tls://8.8.8.8"
-            }, {
-                tag: "local",
-                address: "223.5.5.5",
-                detour: "DIRECT"
-            }
+dns: {
+    servers: [
+        {
+            tag: "google",
+            address: "tls://8.8.8.8"
+        }, {
+            tag: "local",
+            address: "223.5.5.5",
+            detour: "DIRECT"
+        }
         ],
         rules: [
             {
@@ -20,77 +20,75 @@ log: {
             }
         ]
     },
-    inbounds: [
-        {
-            type: "tun",
-            inet4_address: "172.19.0.1/30",
-            inet6_address: "fdfe:dcba:9876::1/126",
-            auto_route: true,
-            strict_route: false,
-        }
-    ],
-    experimental: {
-        clash_api: {
-            external_controller: "127.0.0.1:9090",
-            external_ui: "ui",
-            secret: "",
-            external_ui_download_url: "https://mirror.ghproxy.com/https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip",
-            external_ui_download_detour: "DIRECT",
-            default_mode: "rule"
-        },
-        cache_file: {
-            enabled: true,
-            store_fakeip: false
-        }
+inbounds: [
+    {
+        type: "tun",
+        inet4_address: "172.19.0.1/30",
+        inet6_address: "fdfe:dcba:9876::1/126",
+        auto_route: true,
+        strict_route: false,
+    }
+],
+experimental: {
+    clash_api: {
+        external_controller: "127.0.0.1:9090",
+        external_ui: "ui",
+        secret: "",
+        external_ui_download_url: "https://mirror.ghproxy.com/https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip",
+        external_ui_download_detour: "DIRECT",
+        default_mode: "rule"
     },
-    outbounds: [
+    cache_file: {
+        enabled: true,
+        store_fakeip: false
+    }
+},
+outbounds: [
+    {
+        "type": "direct",
+        "tag": "DIRECT"
+    }, {
+        "type": "dns",
+        "tag": "dns-out"
+    }, {
+        "type": "block",
+        "tag": "block"
+    }, 
+],
+route: {
+    rules: [
         {
-            "type": "direct",
-            "tag": "DIRECT"
+            ip_is_private: true,
+            outbound: "DIRECT"
         }, {
-            "type": "dns",
-            "tag": "dns-out"
+            type: "logical",
+            mode: "or",
+            rules: [
+                { port: 53 },
+                { protocol: "dns" }
+            ],
+            outbound: "dns-out"
         }, {
-            "type": "block",
-            "tag": "block"
-        }, 
+            clash_mode: "direct",
+            outbound: "DIRECT"
+        }, {
+            clash_mode: "global",
+            outbound: "Proxies"
+        }, {
+            domain: [
+                "clash.razord.top",
+                "yacd.metacubex.one",
+                "yacd.haishan.me",
+                "d.metacubex.one"
+            ],
+            outbound: "DIRECT"
+        },
     ],
-    route: {
-        rules: [
-            {
-                ip_is_private: true,
-                outbound: "DIRECT"
-            }, {
-                type: "logical",
-                mode: "or",
-                rules: [
-                    { port: 53 },
-                    { protocol: "dns" }
-                ],
-                outbound: "dns-out"
-            }, {
-                clash_mode: "direct",
-                outbound: "DIRECT"
-            }, {
-                clash_mode: "global",
-                outbound: "Proxies"
-            }, {
-                domain: [
-                    "clash.razord.top",
-                    "yacd.metacubex.one",
-                    "yacd.haishan.me",
-                    "d.metacubex.one"
-                ],
-                outbound: "DIRECT"
-            },
-        ],
-        geosite: {
-            download_detour: "DIRECT"
-        },
-        geoip: {
-            download_detour: "DIRECT"
-        },
-        auto_detect_interface: true,
+    geosite: {
+        download_detour: "DIRECT"
     },
-
+    geoip: {
+        download_detour: "DIRECT"
+    },
+    auto_detect_interface: true,
 }
