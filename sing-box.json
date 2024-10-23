@@ -12,9 +12,9 @@
       "external_ui_download_detour": "",
       "default_mode": "rule"
     },
-    "cache_file": {
-      "enabled": true,
-      "store_fakeip": false
+  "cache_file": {
+    "enabled": true,
+    "store_fakeip": false
     }
   },
   "dns": {
@@ -25,12 +25,12 @@
         "detour": "proxy"
       },
       {
-        "tag": "DIRECT",
-        "address": "https://223.5.5.5/dns-query"
+        "tag": "localDns",
+        "address": "https://223.5.5.5/dns-query",
         "detour": "direct"
       },
       {
-        "tag": "REJECT",
+        "tag": "block",
         "address": "rcode://success"
       }
     ],
@@ -41,16 +41,20 @@
           "cdn.jsdelivr.net",
           "testingcf.jsdelivr.net"
         ],
-        "server": "DIRECT"
+        "server": "localDns"
+      },
+      {
+        "rule_set": "geosite-category-ads-all",
+        "server": "block"
       },
       {
         "outbound": "any",
-        "server": "DIRECT",
+        "server": "localDns",
         "disable_cache": true
-      },
+      },  
       {
         "clash_mode": "direct",
-        "server": "DIRECT"
+        "server": "localDns"
       },
       {
         "clash_mode": "global",
@@ -87,18 +91,19 @@
   ],
   "outbounds": [
     {
-      "tag": "proxy",
-      "type": "selector",
-      "outbounds": [
+      "tag":"proxy",
+      "type":"selector",
+      "outbounds":[
         "auto",
-        "direct"
+        "direct",
+        "{all}"
       ]
     },
     {
-      "tag": "auto",
-      "type": "urltest",
-      "outbounds": [
-        "Proxy"
+      "tag":"auto",
+      "type":"urltest",
+      "outbounds":[
+        "{all}"
       ],
       "url": "http://www.gstatic.com/generate_204",
       "interval": "10m",
@@ -114,11 +119,52 @@
     },
     {
       "type": "block",
-      "tag": "REJECT"
+      "tag": "block"
     }
   ],
   "route": {
     "auto_detect_interface": true,
-    "final": "proxy"
+    "final": "proxy",
+    "rules": [
+      {
+        "protocol": "dns",
+        "outbound": "dns-out"
+      },
+      {
+        "network": "udp",
+        "port": 443,
+        "outbound": "block"
+      },
+      {
+        "rule_set": "geosite-category-ads-all",
+        "outbound": "block"
+      },
+      {
+        "clash_mode": "direct",
+        "outbound": "direct"
+      },
+      {
+        "clash_mode": "global",
+        "outbound": "proxy"
+      },
+      {
+        "domain": [
+          "clash.razord.top",
+          "yacd.metacubex.one",
+          "yacd.haishan.me",
+          "d.metacubex.one"
+        ],
+        "outbound": "direct"
+      }
+    ],
+    "rule_set": [
+      {
+        "tag": "geosite-category-ads-all",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads-all.srs",
+        "download_detour": "direct"
+      }
+    ]
   }
 }
