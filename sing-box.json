@@ -30,7 +30,7 @@
         "detour": "direct"
       },
       {
-        "tag": "block",
+        "tag": "REJECT",
         "address": "rcode://success"
       }
     ],
@@ -45,7 +45,7 @@
       },
       {
         "rule_set": "geosite-category-ads-all",
-        "server": "block"
+        "server": "REJECT"
       },
       {
         "outbound": "any",
@@ -118,8 +118,8 @@
       "tag": "dns-out"
     },
     {
-      "type": "block",
-      "tag": "block"
+      "type": "REJECT",
+      "tag": "REJECT"
     }
   ],
   "route": {
@@ -133,11 +133,11 @@
       {
         "network": "udp",
         "port": 443,
-        "outbound": "block"
+        "outbound": "REJECT"
       },
       {
         "rule_set": "geosite-category-ads-all",
-        "outbound": "block"
+        "outbound": "REJECT"
       },
       {
         "clash_mode": "direct",
