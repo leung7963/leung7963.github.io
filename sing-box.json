@@ -1,169 +1,96 @@
-{
-  "log": {
-    "level": "debug",
-    "timestamp": true
-  },
-  "experimental": {
-    "clash_api": {
-      "external_controller": "127.0.0.1:9090",
-      "external_ui": "ui",
-      "secret": "",
-      "external_ui_download_url": "https://github.com/MetaCubeX/Yacd-meta/archive/gh-pages.zip",
-      "external_ui_download_detour": "",
-      "default_mode": "rule"
+log: {
+        disabled: false,
+        level: "info",
     },
-  "cache_file": {
-    "enabled": true,
-    "store_fakeip": false
-    }
-  },
-  "dns": {
-    "servers": [
-      {
-        "tag": "proxyDns",
-        "address": "tls://8.8.8.8",
-        "detour": "proxy"
-      },
-      {
-        "tag": "DIRECT",
-        "address": "https://223.5.5.5/dns-query"
-      },
-      {
-        "tag": "REJECT",
-        "address": "rcode://success"
-      }
-    ],
-    "rules": [
-      {
-        "domain": [
-          "ghproxy.com",
-          "cdn.jsdelivr.net",
-          "testingcf.jsdelivr.net"
+    dns: {
+        servers: [
+            {
+                tag: "google",
+                address: "tls://8.8.8.8"
+            }, {
+                tag: "local",
+                address: "223.5.5.5",
+                detour: "DIRECT"
+            }
         ],
-        "server": "DIRECT"
-      },
-      {
-        "rule_set": "geosite-category-ads-all",
-        "server": "REJECT"
-      },
-      {
-        "outbound": "any",
-        "server": "DIRECT",
-        "disable_cache": true
-      },  
-      {
-        "clash_mode": "DIRECT",
-        "server": "DIRECT"
-      },
-      {
-        "clash_mode": "global",
-        "server": "proxyDns"
-      }
-    ],
-    "strategy": "ipv4_only"
-  },
-  "inbounds": [
-    {
-      "type": "tun",
-      "address": "172.19.0.1/30",
-      "mtu": 9000,
-      "auto_route": true,
-      "strict_route": true,
-      "sniff": true,
-      "endpoint_independent_nat": false,
-      "stack": "system",
-      "platform": {
-        "http_proxy": {
-          "enabled": true,
-          "server": "127.0.0.1",
-          "server_port": 2080
+        rules: [
+            {
+                outbound: "any",
+                server: "local"
+            }
+        ]
+    },
+    inbounds: [
+        {
+            type: "tun",
+            inet4_address: "172.19.0.1/30",
+            inet6_address: "fdfe:dcba:9876::1/126",
+            auto_route: true,
+            strict_route: false,
         }
-      }
-    },
-    {
-      "type": "mixed",
-      "listen": "127.0.0.1",
-      "listen_port": 2080,
-      "sniff": true,
-      "users": []
-    }
-  ],
-  "outbounds": [
-    {
-      "tag":"proxy",
-      "type":"selector",
-      "outbounds":[
-        "auto",
-        "DIRECT",
-        "{all}"
-      ]
-    },
-    {
-      "tag":"auto",
-      "type":"urltest",
-      "outbounds":[
-        "{all}"
-      ],
-      "url": "http://www.gstatic.com/generate_204",
-      "interval": "10m",
-      "tolerance": 50
-    },
-    {
-      "type": "DIRECT",
-      "tag": "DIRECT"
-    },
-    {
-      "type": "dns",
-      "tag": "dns-out"
-    },
-    {
-      "type": "REJECT",
-      "tag": "REJECT"
-    }
-  ],
-  "route": {
-    "auto_detect_interface": true,
-    "final": "proxy",
-    "rules": [
-      {
-        "protocol": "dns",
-        "outbound": "dns-out"
-      },
-      {
-        "network": "udp",
-        "port": 443,
-        "outbound": "REJECT"
-      },
-      {
-        "rule_set": "geosite-category-ads-all",
-        "outbound": "REJECT"
-      },
-      {
-        "clash_mode": "DIRECT",
-        "outbound": "DIRECT"
-      },
-      {
-        "clash_mode": "global",
-        "outbound": "proxy"
-      },
-      {
-        "domain": [
-          "clash.razord.top",
-          "yacd.metacubex.one",
-          "yacd.haishan.me",
-          "d.metacubex.one"
-        ],
-        "outbound": "DIRECT"
-      }
     ],
-    "rule_set": [
-      {
-        "tag": "geosite-category-ads-all",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads-all.srs",
-        "download_detour": "DIRECT"
-      }
-    ]
-  }
+    experimental: {
+        clash_api: {
+            external_controller: "127.0.0.1:9090",
+            external_ui: "ui",
+            secret: "",
+            external_ui_download_url: "https://mirror.ghproxy.com/https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip",
+            external_ui_download_detour: "DIRECT",
+            default_mode: "rule"
+        },
+        cache_file: {
+            enabled: true,
+            store_fakeip: false
+        }
+    },
+    outbounds: [
+        {
+            "type": "direct",
+            "tag": "DIRECT"
+        }, {
+            "type": "dns",
+            "tag": "dns-out"
+        }, {
+            "type": "block",
+            "tag": "block"
+        }, 
+    ],
+    route: {
+        rules: [
+            {
+                ip_is_private: true,
+                outbound: "DIRECT"
+            }, {
+                type: "logical",
+                mode: "or",
+                rules: [
+                    { port: 53 },
+                    { protocol: "dns" }
+                ],
+                outbound: "dns-out"
+            }, {
+                clash_mode: "direct",
+                outbound: "DIRECT"
+            }, {
+                clash_mode: "global",
+                outbound: "Proxies"
+            }, {
+                domain: [
+                    "clash.razord.top",
+                    "yacd.metacubex.one",
+                    "yacd.haishan.me",
+                    "d.metacubex.one"
+                ],
+                outbound: "DIRECT"
+            },
+        ],
+        geosite: {
+            download_detour: "DIRECT"
+        },
+        geoip: {
+            download_detour: "DIRECT"
+        },
+        auto_detect_interface: true,
+    },
+
 }
