@@ -135,34 +135,7 @@
         "final": "漏网之鱼",
         "auto_detect_interface": true,
         "rule_set": [
-            {
-                "tag": "geosite-category-ads",
-                "type": "remote",
-                "format": "binary",
-                "download_detour": "DIRECT",
-                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads.srs"
-            },
-            {
-                "tag": "geosite-geolocation-!cn",
-                "type": "remote",
-                "format": "binary",
-                "download_detour": "DIRECT",
-                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs"
-            },
-            {
-                "tag": "geosite-goproxy",
-                "type": "remote",
-                "format": "binary",
-                "download_detour": "DIRECT",
-                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-goproxy.srs"
-            },
-            {
-                "tag": "geosite-cn",
-                "type": "remote",
-                "format": "binary",
-                "download_detour": "DIRECT",
-                "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs"
-            }
+            
         ]
     },
 "experimental": {
