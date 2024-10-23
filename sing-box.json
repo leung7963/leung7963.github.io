@@ -9,7 +9,7 @@
     "clash_api": {
       "external_ui": "ui",
       "external_controller": "0.0.0.0:9090",
-      "external_ui_download_detour": "direct",
+      "external_ui_download_detour": "DIRECT",
       "default_mode": "rule",
       "external_ui_download_url": "https://mirror.ghproxy.com/https://github.com/MetaCubeX/Yacd-meta/archive/gh-pages.zip"
     }
@@ -29,7 +29,7 @@
       {
         "tag": "local-dns",
         "address": "tls://223.5.5.5",
-        "detour": "direct"
+        "detour": "DIRECT"
       },
       {
         "tag": "fakeip-dns",
@@ -119,18 +119,18 @@
     {
       "tag": "Proxy",
       "outbounds": [
-        "➜ Direct"
+        "DIRECT"
       ],
       "interrupt_exist_connections": true,
       "type": "selector"
     },
     {
-      "type": "direct",
-      "tag": "➜ Direct"
+      "type": "DIRECT",
+      "tag": "DIRECT"
     },
     {
-      "type": "direct",
-      "tag": "direct"
+      "type": "DIRECT",
+      "tag": "DIRECT"
     },
     {
       "type": "dns",
@@ -160,15 +160,15 @@
           "中国",
           "中國"
         ],
-        "outbound": "direct"
+        "outbound": "DIRECT"
       },
       {
         "ip_is_private": true,
-        "outbound": "direct"
+        "outbound": "DIRECT"
       },
       {
-        "clash_mode": "Direct",
-        "outbound": "direct"
+        "clash_mode": "DIRECT",
+        "outbound": "DIRECT"
       },
       {
         "clash_mode": "Global",
@@ -176,7 +176,7 @@
       },
       {
         "rule_set": [],
-        "outbound": "direct"
+        "outbound": "DIRECT"
       }
     ],
     "auto_detect_interface": true,
