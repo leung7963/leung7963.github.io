@@ -1,5 +1,5 @@
 #!/bin/bash
-token="YOUR_PERSONAL_ACCESS_TOKEN"
+token="555_PERSONAL_ACCESS_TOKEN"
 repo="your - username/your - repository"
 workflow_file="main.yml"
 api_url="https://api.github.com/repos/$repo/actions/workflows/$workflow_file/dispatches"
