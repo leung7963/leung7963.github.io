@@ -1,185 +1,104 @@
 {
-  "experimental": {
-    "cache_file": {
-      "enabled": true,
-      "path": "cache.db",
-      "cache_id": "my_profile2",
-      "store_fakeip": true
+    "log": {
+        "disabled": false,
+        "level": "info",
+        "timestamp": true
     },
-    "clash_api": {
-      "external_ui": "ui",
-      "external_controller": "0.0.0.0:9090",
-      "external_ui_download_detour": "DIRECT",
-      "default_mode": "rule",
-      "external_ui_download_url": "https://mirror.ghproxy.com/https://github.com/MetaCubeX/Yacd-meta/archive/gh-pages.zip"
-    }
-  },
-  "log": {
-    "disabled": true,
-    "level": "info",
-    "timestamp": true
-  },
-  "dns": {
-    "servers": [
-      {
-        "tag": "google",
-        "address": "tls://8.8.8.8",
-        "detour": "Proxy"
-      },
-      {
-        "tag": "local-dns",
-        "address": "tls://223.5.5.5",
-        "detour": "DIRECT"
-      },
-      {
-        "tag": "fakeip-dns",
-        "address": "fakeip"
-      },
-      {
-        "tag": "block-dns",
-        "address": "rcode://success"
-      }
-    ],
-    "rules": [
-      {
-        "outbound": "any",
-        "server": "local-dns"
-      },
-      {
-        "rule_set": [],
-        "rewrite_ttl": 1,
-        "server": "fakeip-dns"
-      },
-      {
-        "domain_suffix": [
-          "edu.cn",
-          "gov.cn",
-          "mil.cn",
-          "ac.cn",
-          "com.cn",
-          "net.cn",
-          "org.cn",
-          "中国",
-          "中國"
+    "dns": {
+        "servers": [
+            {
+                "tag": "dns_proxy",
+                "address": "tls://1.1.1.1",
+                "address_resolver": "dns_resolver"
+            },
+            {
+                "tag": "dns_direct",
+                "address": "h3://dns.alidns.com/dns-query",
+                "address_resolver": "dns_resolver",
+                "detour": "DIRECT"
+            },
+            {
+                "tag": "dns_fakeip",
+                "address": "fakeip"
+            },
+            {
+                "tag": "dns_resolver",
+                "address": "223.5.5.5",
+                "detour": "DIRECT"
+            },
+            {
+                "tag": "block",
+                "address": "rcode://success"
+            }
         ],
-        "server": "local-dns"
-      },
-      {
-        "rule_set": [],
-        "server": "local-dns"
-      },
-      {
-        "query_type": [
-          "A"
+        "rules": [
+            {
+                "outbound": [
+                    "any"
+                ],
+                "server": "dns_resolver"
+            },
+            {
+                "geosite": [
+                    "category-ads-all"
+                ],
+                "server": "dns_block",
+                "disable_cache": true
+            },
+            {
+                "geosite": [
+                    "geolocation-!cn"
+                ],
+                "query_type": [
+                    "A",
+                    "AAAA"
+                ],
+                "server": "dns_fakeip"
+            },
+            {
+                "geosite": [
+                    "geolocation-!cn"
+                ],
+                "server": "dns_proxy"
+            }
         ],
-        "rewrite_ttl": 1,
-        "server": "fakeip-dns"
-      }
-    ],
-    "strategy": "prefer_ipv4",
-    "fakeip": {
-      "enabled": true,
-      "inet4_range": "198.18.0.0/15"
-    }
-  },
-  "inbounds": [
-    {
-      "type": "mixed",
-      "tag": "mixed-in",
-      "listen": "::",
-      "listen_port": 8888,
-      "sniff": true
-    },
-    {
-      "type": "redirect",
-      "tag": "redirect-in",
-      "listen": "::",
-      "sniff_override_destination": false,
-      "listen_port": 9887,
-      "sniff": true
-    },
-    {
-      "type": "tun",
-      "inet4_address": "172.19.0.1/30",
-      "stack": "system",
-      "sniff": true,
-      "sniff_override_destination": false,
-      "auto_route": true,
-      "gso": false,
-      "platform": {
-        "http_proxy": {
-          "enabled": true,
-          "server": "127.0.0.1",
-          "server_port": 8888
+        "final": "dns_direct",
+        "independent_cache": true,
+        "fakeip": {
+            "enabled": true,
+            "inet6_range": "fc00::\/18",
+            "inet4_range": "198.18.0.0\/15"
         }
-      }
-    }
-  ],
-  "outbounds": [
-    {
-      "tag": "Proxy",
-      "outbounds": [
-        "DIRECT"
-      ],
-      "interrupt_exist_connections": true,
-      "type": "selector"
     },
-    {
-      "type": "DIRECT",
-      "tag": "DIRECT"
+    "ntp": {
+        "enabled": true,
+        "server": "time.apple.com",
+        "server_port": 123,
+        "interval": "30m",
+        "detour": "DIRECT"
     },
-    {
-      "type": "DIRECT",
-      "tag": "DIRECT"
-    },
-    {
-      "type": "dns",
-      "tag": "dns-out"
-    }
-  ],
-  "route": {
-    "rule_set": [],
-    "rules": [
-      {
-        "protocol": "dns",
-        "outbound": "dns-out"
-      },
-      {
-        "port": 53,
-        "outbound": "dns-out"
-      },
-      {
-        "domain_suffix": [
-          "edu.cn",
-          "gov.cn",
-          "mil.cn",
-          "ac.cn",
-          "com.cn",
-          "net.cn",
-          "org.cn",
-          "中国",
-          "中國"
-        ],
-        "outbound": "DIRECT"
-      },
-      {
-        "ip_is_private": true,
-        "outbound": "DIRECT"
-      },
-      {
-        "clash_mode": "DIRECT",
-        "outbound": "DIRECT"
-      },
-      {
-        "clash_mode": "Global",
-        "outbound": "Proxy"
-      },
-      {
-        "rule_set": [],
-        "outbound": "DIRECT"
-      }
+    "inbounds": [
+        {
+            "type": "mixed",
+            "tag": "mixed-in",
+            "listen": "0.0.0.0",
+            "listen_port": 2080
+        },
+        {
+            "type": "tun",
+            "tag": "tun-in",
+            "inet4_address": "172.19.0.1/30",
+            "inet6_address": "fdfe:dcba:9876::1/126",
+            "auto_route": true,
+            "strict_route": true,
+            "stack": "mixed",
+            "sniff": true
+        }
     ],
-    "auto_detect_interface": true,
-    "final": "Proxy"
-  }
+    "outbounds": [],
+    "route": {
+        "rules": [],
+        "auto_detect_interface": true
+    },
+    "experimental": {}
 }
