@@ -1,8 +1,14 @@
 {
   "rules": [
     {
+      "domain": [
+        "google.com"
+      ],
       "domain_suffix": [
-        "iyf.tv"
+        "leung0108.us.kg"
+      ],
+      "domain_keyword": [
+        "-e1."
       ]
     }
   ],
