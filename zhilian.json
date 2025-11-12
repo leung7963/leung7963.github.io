@@ -9,11 +9,11 @@
         "hifini.com",
         "zeekstudio.com",
         "amazon.com",
-        "0662.dns-dynamic.net",
-        "0662.ip-ddns.com",
-        "0662.pp.ua",
-        "7.f.a.b.0.d.0.0.1.0.a.2.ip6.arpa",
-        "yj0662.netlib.re"
+        "dns-dynamic.net",
+        "ip-ddns.com",
+        "pp.ua",
+        "ip6.arpa",
+        "netlib.re"
       ],
       "domain_keyword": [
         "koofr"
