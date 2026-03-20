@@ -2,6 +2,7 @@
   "rules": [
     {
       "domain": [
+        "srv29905.blue.kundencontroller.de",
         "yfsp.tv",
         "bybit-exchange.github.io",
         "bybit.ada.support"
